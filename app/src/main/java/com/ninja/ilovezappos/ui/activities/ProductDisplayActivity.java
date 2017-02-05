@@ -1,9 +1,11 @@
-package com.ninja.ilovezappos;
+package com.ninja.ilovezappos.ui.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+import com.ninja.ilovezappos.R;
+
+public class ProductDisplayActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
