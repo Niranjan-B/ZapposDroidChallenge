@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar_activity_main"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <ImageView
             android:id="@+id/imageview_nointernet_activity_main"
@@ -31,7 +31,9 @@
             android:layout_below="@id/imageview_nointernet_activity_main"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/edit_text_padding_main_activity"
-            android:text="@string/button_retry_activity_main"/>
+            android:text="@string/button_retry_activity_main"
+            android:textColor="#dfcd00"
+            android:background="@drawable/info_button_bg_card_product"/>
 
     </RelativeLayout>
 
@@ -40,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar_activity_main"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:visibility="gone">
 
         <ImageView
