@@ -9,4 +9,10 @@
 
     <dimen name="img_view_dimens_main_activity">160dp</dimen>
     <dimen name="img_view_margintop_main_activity">96dp</dimen>
+
+    <dimen name="button_text_size_card_product">14sp</dimen>
+    <dimen name="button_height_card_product">32dp</dimen>
+    <dimen name="button_width_card_product">64dp</dimen>
+    <dimen name="height_product_card">192dp</dimen>
+
 </resources>

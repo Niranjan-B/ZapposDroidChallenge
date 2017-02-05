@@ -14,4 +14,16 @@
         <item name="android:layout_marginTop">@dimen/img_view_margintop_main_activity</item>
     </style>
 
+    <style name="textViewDiscountStyleProductCard">
+        <item name="android:textColor">#4fbf2a</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textViewStrikeThroughProductCard">
+        <item name="android:textColor">#de9eb3</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>
