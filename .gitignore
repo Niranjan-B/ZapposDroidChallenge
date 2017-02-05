@@ -1,14 +1,8 @@
-<<<<<<< HEAD
 *.iml
-.gradle
-/local.properties
-/.idea/workspace.xml
 /.idea/libraries
 .DS_Store
-/build
 /captures
 .externalNativeBuild
-=======
 # Built application files
 *.apk
 *.ap_
@@ -44,9 +38,10 @@ proguard/
 captures/
 
 # Intellij
-*.iml
 .idea/workspace.xml
 
 # Keystore files
 *.jks
->>>>>>> b6ac34f47619d687ed5b389a948828110e0a3b46
+.idea/vcs.xml
+app/libs/
+app/src/main/res/drawable/
