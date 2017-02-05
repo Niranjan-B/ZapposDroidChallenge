@@ -7,4 +7,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="imgViewStyleStateChangeMainActivity">
+        <item name="android:layout_width">@dimen/img_view_dimens_main_activity</item>
+        <item name="android:layout_height">@dimen/img_view_dimens_main_activity</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginTop">@dimen/img_view_margintop_main_activity</item>
+    </style>
+
 </resources>
