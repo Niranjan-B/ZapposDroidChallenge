@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbar_height_main_activity"
+    android:background="@color/colorPrimary"
+    android:elevation="@dimen/toolbar_elevation_main_activity"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/toolbar_activity_main_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/edit_text_padding_main_activity"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="ILoveZappos"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/edit_text_height_main_activity"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:background="@android:color/background_light"
+            android:drawableLeft="@drawable/ic_search_white_24px"
+            android:drawablePadding="@dimen/edit_text_padding_main_activity"
+            android:drawableStart="@drawable/ic_search_white_24px"
+            android:ellipsize="end"
+            android:hint="@string/text_search_toolbar_activity_main"
+            android:imeOptions="actionSearch"
+            android:inputType="text|textNoSuggestions"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/edit_text_padding_main_activity"
+            android:paddingRight="@dimen/edit_text_padding_main_activity"
+            android:textColor="@color/text_color_edittext_toolbar_main_activity"
+            android:textColorHint="@color/text_color_edittext_toolbar_main_activity"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+</android.support.v7.widget.Toolbar>
