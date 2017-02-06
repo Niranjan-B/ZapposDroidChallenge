@@ -3,27 +3,42 @@ package com.ninja.ilovezappos.ui.activities;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ninja.data.entities.Product;
+import com.ninja.data.entities.Result;
 import com.ninja.ilovezappos.R;
-import com.ninja.ilovezappos.Utils;
+import com.ninja.ilovezappos.utils.ProductCardClickListener;
+import com.ninja.ilovezappos.utils.Utils;
 import com.ninja.ilovezappos.mvp.presenters.ProductDisplayPresenter;
 import com.ninja.ilovezappos.mvp.views.ProductDisplayView;
+import com.ninja.ilovezappos.ui.adapters.ProductDisplayAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDisplayActivity extends AppCompatActivity implements ProductDisplayView {
+public class ProductDisplayActivity extends AppCompatActivity implements ProductDisplayView,
+        ProductCardClickListener {
 
     ProductDisplayPresenter mProductDisplayPresenter;
 
-    EditText mSearchBar;
+    private EditText mSearchBar;
+    private RelativeLayout mNoSearchContainer, mNoInternetContainer;
+    private Button mRetryButton;
+    private ProgressBar mProgressBar;
+    private RecyclerView mProductDisplayList;
+    private ProductDisplayAdapter mProductDisplayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +46,13 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         setContentView(R.layout.activity_main);
 
         mSearchBar = (EditText) findViewById(R.id.edit_text_toolbar_mainactivity);
+        mNoInternetContainer = (RelativeLayout) findViewById(R.id.container_no_internet);
+        mNoSearchContainer = (RelativeLayout) findViewById(R.id.container_no_search);
+        mRetryButton = (Button) findViewById(R.id.button_retry_main_activity);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar_main_activity);
+        mProductDisplayList = (RecyclerView) findViewById(R.id.recyclerview_products_main_activity);
 
-        initToolbar();
+        initUi();
         initPresenter();
         initSearchBar();
     }
@@ -66,11 +86,11 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
                         } else {
                             // showing internet connection failure screen
                             // presenter should call this
-                            Utils.showToast(getContext(), "internet failed");
+                            mProductDisplayPresenter.displayNoInternetScreen();
                         }
                     } else {
-                        // presenter should call this
-                        Utils.showToast(getContext(), "Please enter a product!");
+                        // displaying empty search screen
+                        mProductDisplayPresenter.displayEmptySearchToast();
                     }
                     return true;
                 }
@@ -79,9 +99,61 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         });
     }
 
-    @Override
-    public void showSearchResults(List<Product> productList) {
+    private void initUi() {
+        initToolbar();
+        initRecyclerView();
 
+        mRetryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mProductDisplayPresenter.onCreate();
+            }
+        });
+    }
+
+    private void initRecyclerView() {
+        mProductDisplayAdapter = new ProductDisplayAdapter(getContext(), new ArrayList<Result>(), this);
+
+        mProductDisplayList.setHasFixedSize(true);
+        mProductDisplayList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mProductDisplayList.setItemAnimator(new DefaultItemAnimator());
+        mProductDisplayList.setAdapter(mProductDisplayAdapter);
+    }
+
+    @Override
+    public void showSearchResults(List<Result> productList) {
+        Log.d("ninja", productList.size() + "");
+        mProductDisplayAdapter.addProducts(new ArrayList<>(productList));
+
+    }
+
+    @Override
+    public void showEmptySearchToast(String message) {
+        Utils.showToast(getContext(), message);
+    }
+
+    @Override
+    public void hideStateChangeViews() {
+        if (mNoInternetContainer.getVisibility() == View.VISIBLE || mNoSearchContainer.getVisibility() == View.VISIBLE
+                || mProductDisplayList.getVisibility() == View.VISIBLE) {
+            mNoInternetContainer.setVisibility(View.GONE);
+            mNoSearchContainer.setVisibility(View.GONE);
+            mProductDisplayList.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void displayNoSearchResultContainer() {
+        if (!(mNoSearchContainer.getVisibility() == View.VISIBLE)) {
+            mNoSearchContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void displayProductView() {
+        if (mProductDisplayList.getVisibility() == View.GONE) {
+            mProductDisplayList.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -91,21 +163,42 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
 
     @Override
     public void internetTimeOutError() {
-
     }
 
     @Override
     public void internetUnavailableError() {
-
+        if (! (mNoInternetContainer.getVisibility() == View.VISIBLE)) {
+            mNoInternetContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
     public void hideProgress() {
-
+        if (mProgressBar.getVisibility() == View.VISIBLE) {
+            mProgressBar.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void showProgress() {
+        if (mProgressBar.getVisibility() == View.GONE) {
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
 
+
+    @Override
+    public void shareProduct(String productId) {
+        Log.d("ninja", "Share clicked!!!" + productId);
+    }
+
+    @Override
+    public void getInfoAboutProduct(String productUrl) {
+        Log.d("ninja", "more info about product!!!" + productUrl);
+    }
+
+    @Override
+    public void addToCart() {
+        Log.d("ninja", "Added to cart!!!");
     }
 }

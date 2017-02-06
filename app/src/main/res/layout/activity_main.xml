@@ -27,6 +27,7 @@
             android:src="@mipmap/no_internet_connection"/>
 
         <Button
+            android:id="@+id/button_retry_main_activity"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/edit_text_height_main_activity"
             android:layout_below="@id/imageview_nointernet_activity_main"
@@ -43,8 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar_activity_main"
-        android:visibility="gone"
-        tools:visibility="gone">
+        android:visibility="visible"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/imageview_nosearch_activity_main"
@@ -63,6 +64,22 @@
             android:textColor="@color/textview_textcolor_nosearch"
             android:textSize="16sp"/>
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar_main_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        tools:visibility="gone"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_products_main_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar_activity_main"
+        android:visibility="gone"
+        tools:visibility="visible"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_cart_main_activity"

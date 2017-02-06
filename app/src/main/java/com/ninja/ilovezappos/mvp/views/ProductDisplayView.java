@@ -1,6 +1,6 @@
 package com.ninja.ilovezappos.mvp.views;
 
-import com.ninja.data.entities.Product;
+import com.ninja.data.entities.Result;
 import com.ninja.ilovezappos.mvp.views.base.BaseView;
 import com.ninja.ilovezappos.mvp.views.base.InternetView;
 import com.ninja.ilovezappos.mvp.views.base.ProgressableView;
@@ -13,5 +13,9 @@ import java.util.List;
  */
 
 public interface ProductDisplayView extends View, BaseView, ProgressableView, InternetView {
-    void showSearchResults(List<Product> productList);
+    void showSearchResults(List<Result> productList);
+    void showEmptySearchToast(String message);
+    void hideStateChangeViews();
+    void displayNoSearchResultContainer();
+    void displayProductView();
 }

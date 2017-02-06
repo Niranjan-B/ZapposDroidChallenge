@@ -1,6 +1,5 @@
 package com.ninja.ilovezappos.mvp.presenters;
 
-import android.util.Log;
 
 import com.ninja.data.entities.Product;
 import com.ninja.data.rest.RestDataSource;
@@ -63,23 +62,54 @@ public class ProductDisplayPresenter implements Presenter {
 
             @Override
             public void onNext(Product value) {
-                Log.d("ninja", value.getResults().toString());
+                if (!value.getStatusCode().contains("200")) {
+                    // if the status is not OK, display no internet container
+                    mProductDisplayView.internetUnavailableError();
+                } else if (value.getResults().size() == 0) {
+                    // if results are empty, display no search container
+                    hideStateChangeViews();
+                    mProductDisplayView.displayNoSearchResultContainer();
+                    mProductDisplayView.showEmptySearchToast("Please refine your search");
+                } else {
+                    // if the results are got successfully, pass them on the activity to display and hide state change views
+                    mProductDisplayView.showProgress();
+                    hideStateChangeViews();
+                    mProductDisplayView.displayProductView();
+                    mProductDisplayView.showSearchResults(value.getResults());
+                }
+
             }
 
             @Override
             public void onError(Throwable e) {
-                Log.d("ninja", e + "");
+                // show no internet container here
+                mProductDisplayView.hideProgress();
+                hideStateChangeViews();
+                mProductDisplayView.internetUnavailableError();
             }
 
             @Override
             public void onComplete() {
-                Log.d("ninja", "completed!!");
+                mProductDisplayView.hideProgress();
             }
         });
     }
 
     public void setSearchParam(String searchParam) {
         mGetProductsUseCase.passSearchParameter(searchParam);
+    }
+
+    public void displayNoInternetScreen() {
+        hideStateChangeViews();
+        mProductDisplayView.internetUnavailableError();
+    }
+
+    public void displayEmptySearchToast() {
+        mProductDisplayView.showEmptySearchToast("Please enter a product!");
+    }
+
+    private void hideStateChangeViews() {
+        mProductDisplayView.hideStateChangeViews();
     }
 
 }
