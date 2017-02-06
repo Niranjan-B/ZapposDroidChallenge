@@ -1,4 +1,4 @@
-package com.ninja.ilovezappos;
+package com.ninja.ilovezappos.utils;
 
 import android.app.Activity;
 import android.content.Context;
