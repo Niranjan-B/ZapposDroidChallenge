@@ -65,6 +65,14 @@
             android:textSize="16sp"/>
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_bar_main_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        tools:visibility="gone"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_cart_main_activity"
         android:layout_width="wrap_content"
