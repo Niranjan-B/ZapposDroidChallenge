@@ -17,4 +17,5 @@ public interface ProductDisplayView extends View, BaseView, ProgressableView, In
     void showEmptySearchToast(String message);
     void hideStateChangeViews();
     void displayNoSearchResultContainer();
+    void displayProductView();
 }

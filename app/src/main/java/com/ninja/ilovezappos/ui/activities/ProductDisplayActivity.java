@@ -3,6 +3,9 @@ package com.ninja.ilovezappos.ui.activities;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -19,7 +22,9 @@ import com.ninja.ilovezappos.R;
 import com.ninja.ilovezappos.Utils;
 import com.ninja.ilovezappos.mvp.presenters.ProductDisplayPresenter;
 import com.ninja.ilovezappos.mvp.views.ProductDisplayView;
+import com.ninja.ilovezappos.ui.adapters.ProductDisplayAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDisplayActivity extends AppCompatActivity implements ProductDisplayView {
@@ -30,6 +35,8 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
     private RelativeLayout mNoSearchContainer, mNoInternetContainer;
     private Button mRetryButton;
     private ProgressBar mProgressBar;
+    private RecyclerView mProductDisplayList;
+    private ProductDisplayAdapter mProductDisplayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,7 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         mNoSearchContainer = (RelativeLayout) findViewById(R.id.container_no_search);
         mRetryButton = (Button) findViewById(R.id.button_retry_main_activity);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar_main_activity);
+        mProductDisplayList = (RecyclerView) findViewById(R.id.recyclerview_products_main_activity);
 
         initUi();
         initPresenter();
@@ -91,6 +99,7 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
 
     private void initUi() {
         initToolbar();
+        initRecyclerView();
 
         mRetryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,9 +109,20 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         });
     }
 
+    private void initRecyclerView() {
+        mProductDisplayAdapter = new ProductDisplayAdapter(getContext(), new ArrayList<Result>());
+
+        mProductDisplayList.setHasFixedSize(true);
+        mProductDisplayList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mProductDisplayList.setItemAnimator(new DefaultItemAnimator());
+        mProductDisplayList.setAdapter(mProductDisplayAdapter);
+    }
+
     @Override
     public void showSearchResults(List<Result> productList) {
         Log.d("ninja", productList.size() + "");
+        mProductDisplayAdapter.addProducts(new ArrayList<>(productList));
+
     }
 
     @Override
@@ -112,9 +132,11 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
 
     @Override
     public void hideStateChangeViews() {
-        if (mNoInternetContainer.getVisibility() == View.VISIBLE || mNoSearchContainer.getVisibility() == View.VISIBLE) {
+        if (mNoInternetContainer.getVisibility() == View.VISIBLE || mNoSearchContainer.getVisibility() == View.VISIBLE
+                || mProductDisplayList.getVisibility() == View.VISIBLE) {
             mNoInternetContainer.setVisibility(View.GONE);
             mNoSearchContainer.setVisibility(View.GONE);
+            mProductDisplayList.setVisibility(View.GONE);
         }
     }
 
@@ -122,6 +144,13 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
     public void displayNoSearchResultContainer() {
         if (!(mNoSearchContainer.getVisibility() == View.VISIBLE)) {
             mNoSearchContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void displayProductView() {
+        if (mProductDisplayList.getVisibility() == View.GONE) {
+            mProductDisplayList.setVisibility(View.VISIBLE);
         }
     }
 

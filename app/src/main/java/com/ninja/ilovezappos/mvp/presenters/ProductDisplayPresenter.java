@@ -74,6 +74,7 @@ public class ProductDisplayPresenter implements Presenter {
                     // if the results are got successfully, pass them on the activity to display and hide state change views
                     mProductDisplayView.showProgress();
                     hideStateChangeViews();
+                    mProductDisplayView.displayProductView();
                     mProductDisplayView.showSearchResults(value.getResults());
                 }
 
