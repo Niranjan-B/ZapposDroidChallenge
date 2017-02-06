@@ -21,7 +21,7 @@
     </style>
 
     <style name="textViewStrikeThroughProductCard">
-        <item name="android:textColor">#de9eb3</item>
+        <item name="android:textColor">#746f6f</item>
         <item name="android:textSize">11sp</item>
         <item name="android:textStyle">bold</item>
     </style>
