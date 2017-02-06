@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                xmlns:tools="http://schemas.android.com/tools">
+                android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
@@ -12,14 +12,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingRight="@dimen/edit_text_padding_main_activity"
-            android:paddingEnd="@dimen/edit_text_padding_main_activity">
+            android:paddingEnd="@dimen/edit_text_padding_main_activity"
+            android:paddingRight="@dimen/edit_text_padding_main_activity">
 
             <ImageView
                 android:id="@+id/imgview_product_productcard"
                 android:layout_width="136dp"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/edit_text_padding_main_activity"
+                android:scaleType="fitXY"
                 android:src="@mipmap/no_search"/>
 
             <TextView
@@ -32,10 +33,10 @@
                 android:layout_toRightOf="@id/imgview_product_productcard"
                 android:ellipsize="end"
                 android:maxLines="2"
-                tools:text="Sportswear Essential Short Sleeve Top"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                tools:text="Sportswear Essential Short Sleeve Top"/>
 
             <TextView
                 android:id="@+id/textview_manname_productcard"
@@ -44,8 +45,8 @@
                 android:layout_below="@+id/textview_prodname_productcard"
                 android:layout_toEndOf="@+id/imgview_product_productcard"
                 android:layout_toRightOf="@+id/imgview_product_productcard"
-                tools:text="By Nike"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                tools:text="By Nike"/>
 
             <TextView
                 android:id="@+id/textview_prodprice_productcard"
@@ -59,10 +60,10 @@
                 android:layout_toRightOf="@+id/imgview_product_productcard"
                 android:ellipsize="end"
                 android:maxLength="10"
-                tools:text="$4000.0"
                 android:textColor="#cc0044"
                 android:textSize="15sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                tools:text="$4000.0"/>
 
             <TextView
                 android:id="@+id/textview_leftpar_productcard"
