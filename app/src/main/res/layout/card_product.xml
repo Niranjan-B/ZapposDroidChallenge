@@ -1,185 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_product_card"
-        android:layout_margin="@dimen/edit_text_padding_main_activity">
+    <data>
 
-        <RelativeLayout
+        <import type="com.ninja.data.entities.Result"/>
+        <import type="android.view.View"/>
+
+        <variable name="result" type="Result"/>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingEnd="@dimen/edit_text_padding_main_activity"
-            android:paddingRight="@dimen/edit_text_padding_main_activity">
+            android:layout_height="@dimen/height_product_card"
+            android:layout_margin="@dimen/edit_text_padding_main_activity">
 
-            <ImageView
-                android:id="@+id/imgview_product_productcard"
-                android:layout_width="136dp"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/edit_text_padding_main_activity"
-                android:scaleType="fitXY"
-                android:src="@mipmap/no_search"/>
-
-            <TextView
-                android:id="@+id/textview_prodname_productcard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_toEndOf="@id/imgview_product_productcard"
-                android:layout_toRightOf="@id/imgview_product_productcard"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="Sportswear Essential Short Sleeve Top"/>
-
-            <TextView
-                android:id="@+id/textview_manname_productcard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textview_prodname_productcard"
-                android:layout_toEndOf="@+id/imgview_product_productcard"
-                android:layout_toRightOf="@+id/imgview_product_productcard"
-                android:textSize="12sp"
-                tools:text="By Nike"/>
-
-            <TextView
-                android:id="@+id/textview_prodprice_productcard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textview_manname_productcard"
-                android:layout_marginEnd="@dimen/edit_text_padding_main_activity"
-                android:layout_marginRight="@dimen/edit_text_padding_main_activity"
-                android:layout_marginTop="24dp"
-                android:layout_toEndOf="@+id/imgview_product_productcard"
-                android:layout_toRightOf="@+id/imgview_product_productcard"
-                android:ellipsize="end"
-                android:maxLength="10"
-                android:textColor="#cc0044"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                tools:text="$4000.0"/>
-
-            <TextView
-                android:id="@+id/textview_leftpar_productcard"
-                style="@style/textViewStrikeThroughProductCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/textview_prodprice_productcard"
-                android:layout_alignBottom="@+id/textview_prodprice_productcard"
-                android:layout_toEndOf="@+id/textview_prodprice_productcard"
-                android:layout_toRightOf="@+id/textview_prodprice_productcard"
-                android:text="( "/>
-
-            <TextView
-                android:id="@+id/textview_discountprice_productcard"
-                style="@style/textViewStrikeThroughProductCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/textview_leftpar_productcard"
-                android:layout_alignBottom="@+id/textview_leftpar_productcard"
-                android:layout_toEndOf="@+id/textview_leftpar_productcard"
-                android:layout_toRightOf="@+id/textview_leftpar_productcard"
-                android:ellipsize="end"
-                android:maxLength="10"
-                tools:text="$1000"/>
-
-            <TextView
-                android:id="@+id/textview_rightpar_productcard"
-                style="@style/textViewStrikeThroughProductCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/textview_discountprice_productcard"
-                android:layout_alignBottom="@+id/textview_discountprice_productcard"
-                android:layout_toEndOf="@+id/textview_discountprice_productcard"
-                android:layout_toRightOf="@+id/textview_discountprice_productcard"
-                android:text=" ) "/>
-
-            <TextView
-                android:id="@+id/textview_leftpar_dis_productcard"
-                style="@style/textViewDiscountStyleProductCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/textview_leftpar_productcard"
-                android:layout_toEndOf="@+id/imgview_product_productcard"
-                android:layout_toRightOf="@+id/imgview_product_productcard"
-                android:text="( "/>
-
-            <TextView
-                android:id="@+id/textView_discount_productcard"
-                style="@style/textViewDiscountStyleProductCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/textview_leftpar_dis_productcard"
-                android:layout_alignBottom="@+id/textview_leftpar_dis_productcard"
-                android:layout_toEndOf="@+id/textview_leftpar_dis_productcard"
-                android:layout_toRightOf="@+id/textview_leftpar_dis_productcard"
-                android:ellipsize="end"
-                android:maxLength="4"
-                tools:text="10%"/>
-
-            <TextView
-                android:id="@+id/textview_rightpar_dis_productcard"
-                style="@style/textViewDiscountStyleProductCard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/textView_discount_productcard"
-                android:layout_alignBottom="@+id/textView_discount_productcard"
-                android:layout_toEndOf="@+id/textView_discount_productcard"
-                android:layout_toRightOf="@+id/textView_discount_productcard"
-                android:text=" OFF ) "/>
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="@dimen/edit_text_padding_main_activity"
-                android:layout_toEndOf="@id/imgview_product_productcard"
-                android:layout_toRightOf="@id/imgview_product_productcard"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:paddingEnd="@dimen/edit_text_padding_main_activity"
+                android:paddingRight="@dimen/edit_text_padding_main_activity">
 
-                <ImageButton
-                    android:id="@+id/button_share_product_card"
-                    android:layout_width="@dimen/button_width_card_product"
-                    android:layout_height="@dimen/button_height_card_product"
+                <ImageView
+                    android:id="@+id/imgview_product_productcard"
+                    android:layout_width="136dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/edit_text_padding_main_activity"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/no_search"
+                    app:imageUrl="@{result.thumbnailImageUrl}"/>
+
+                <TextView
+                    android:id="@+id/textview_prodname_productcard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_toEndOf="@id/imgview_product_productcard"
+                    android:layout_toRightOf="@id/imgview_product_productcard"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="@{result.productName}"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="Sportswear Essential Short Sleeve Top"/>
+
+                <TextView
+                    android:id="@+id/textview_manname_productcard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_prodname_productcard"
+                    android:layout_toEndOf="@+id/imgview_product_productcard"
+                    android:layout_toRightOf="@+id/imgview_product_productcard"
+                    android:text="@{result.brandName}"
+                    android:textSize="12sp"
+                    tools:text="By Nike"/>
+
+                <TextView
+                    android:id="@+id/textview_prodprice_productcard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_manname_productcard"
                     android:layout_marginEnd="@dimen/edit_text_padding_main_activity"
                     android:layout_marginRight="@dimen/edit_text_padding_main_activity"
-                    android:layout_weight="1"
-                    android:background="@drawable/share_button_bg_card_product"
-                    android:src="@drawable/ic_share_black_24dp"
-                    android:textColor="#63a0ef"/>
+                    android:layout_marginTop="24dp"
+                    android:layout_toEndOf="@+id/imgview_product_productcard"
+                    android:layout_toRightOf="@+id/imgview_product_productcard"
+                    android:ellipsize="end"
+                    android:maxLength="10"
+                    android:text="@{result.price}"
+                    android:textColor="#cc0044"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:text="$4000.0"/>
 
-                <Button
-                    android:id="@+id/button_info_product_card"
-                    android:layout_width="@dimen/button_width_card_product"
-                    android:layout_height="@dimen/button_height_card_product"
-                    android:layout_marginEnd="@dimen/edit_text_padding_main_activity"
-                    android:layout_marginRight="@dimen/edit_text_padding_main_activity"
-                    android:layout_weight="1"
-                    android:background="@drawable/info_button_bg_card_product"
-                    android:text="\?"
-                    android:textColor="#dfcd00"
-                    android:textSize="@dimen/button_text_size_card_product"/>
+                <TextView
+                    android:id="@+id/textview_leftpar_productcard"
+                    style="@style/textViewStrikeThroughProductCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textview_prodprice_productcard"
+                    android:layout_alignBottom="@+id/textview_prodprice_productcard"
+                    android:layout_toEndOf="@+id/textview_prodprice_productcard"
+                    android:layout_toRightOf="@+id/textview_prodprice_productcard"
+                    android:text="( "
+                    android:visibility='@{result.percentOff.equals("0%") ? View.GONE : View.VISIBLE}'/>
 
-                <Button
-                    android:id="@+id/button_add_product_card"
-                    android:layout_width="@dimen/button_width_card_product"
-                    android:layout_height="@dimen/button_height_card_product"
-                    android:layout_weight="1"
-                    android:background="@drawable/add_button_bg_card_product"
-                    android:text="+"
-                    android:textColor="#4fbf2a"
-                    android:textSize="@dimen/button_text_size_card_product"/>
+                <TextView
+                    android:id="@+id/textview_discountprice_productcard"
+                    style="@style/textViewStrikeThroughProductCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textview_leftpar_productcard"
+                    android:layout_alignBottom="@+id/textview_leftpar_productcard"
+                    android:layout_toEndOf="@+id/textview_leftpar_productcard"
+                    android:layout_toRightOf="@+id/textview_leftpar_productcard"
+                    android:ellipsize="end"
+                    android:maxLength="10"
+                    android:text="@{result.originalPrice}"
+                    android:visibility='@{result.percentOff.equals("0%") ? View.GONE : View.VISIBLE}'
+                    tools:text="$1000"/>
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/textview_rightpar_productcard"
+                    style="@style/textViewStrikeThroughProductCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textview_discountprice_productcard"
+                    android:layout_alignBottom="@+id/textview_discountprice_productcard"
+                    android:layout_toEndOf="@+id/textview_discountprice_productcard"
+                    android:layout_toRightOf="@+id/textview_discountprice_productcard"
+                    android:text=" ) "
+                    android:visibility='@{result.percentOff.equals("0%") ? View.GONE : View.VISIBLE}'/>
 
-        </RelativeLayout>
+                <TextView
+                    android:id="@+id/textview_leftpar_dis_productcard"
+                    style="@style/textViewDiscountStyleProductCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_leftpar_productcard"
+                    android:layout_toEndOf="@+id/imgview_product_productcard"
+                    android:layout_toRightOf="@+id/imgview_product_productcard"
+                    android:text="( "
+                    android:visibility='@{result.percentOff.equals("0%") ? View.GONE : View.VISIBLE}'/>
 
-    </android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/textView_discount_productcard"
+                    style="@style/textViewDiscountStyleProductCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textview_leftpar_dis_productcard"
+                    android:layout_alignBottom="@+id/textview_leftpar_dis_productcard"
+                    android:layout_toEndOf="@+id/textview_leftpar_dis_productcard"
+                    android:layout_toRightOf="@+id/textview_leftpar_dis_productcard"
+                    android:ellipsize="end"
+                    android:maxLength="4"
+                    android:text="@{result.percentOff}"
+                    android:visibility='@{result.percentOff.equals("0%") ? View.GONE : View.VISIBLE}'
+                    tools:text="10%"/>
 
-</RelativeLayout>
+                <TextView
+                    android:id="@+id/textview_rightpar_dis_productcard"
+                    style="@style/textViewDiscountStyleProductCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/textView_discount_productcard"
+                    android:layout_alignBottom="@+id/textView_discount_productcard"
+                    android:layout_toEndOf="@+id/textView_discount_productcard"
+                    android:layout_toRightOf="@+id/textView_discount_productcard"
+                    android:text=" OFF ) "
+                    android:visibility='@{result.percentOff.equals("0%") ? View.GONE : View.VISIBLE}'/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="@dimen/edit_text_padding_main_activity"
+                    android:layout_toEndOf="@id/imgview_product_productcard"
+                    android:layout_toRightOf="@id/imgview_product_productcard"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/button_share_product_card"
+                        android:layout_width="@dimen/button_width_card_product"
+                        android:layout_height="@dimen/button_height_card_product"
+                        android:layout_marginEnd="@dimen/edit_text_padding_main_activity"
+                        android:layout_marginRight="@dimen/edit_text_padding_main_activity"
+                        android:layout_weight="1"
+                        android:background="@drawable/share_button_bg_card_product"
+                        android:src="@drawable/ic_share_black_24dp"
+                        android:textColor="#63a0ef"/>
+
+                    <Button
+                        android:id="@+id/button_info_product_card"
+                        android:layout_width="@dimen/button_width_card_product"
+                        android:layout_height="@dimen/button_height_card_product"
+                        android:layout_marginEnd="@dimen/edit_text_padding_main_activity"
+                        android:layout_marginRight="@dimen/edit_text_padding_main_activity"
+                        android:layout_weight="1"
+                        android:background="@drawable/info_button_bg_card_product"
+                        android:text="\?"
+                        android:textColor="#dfcd00"
+                        android:textSize="@dimen/button_text_size_card_product"/>
+
+                    <Button
+                        android:id="@+id/button_add_product_card"
+                        android:layout_width="@dimen/button_width_card_product"
+                        android:layout_height="@dimen/button_height_card_product"
+                        android:layout_weight="1"
+                        android:background="@drawable/add_button_bg_card_product"
+                        android:text="+"
+                        android:textColor="#4fbf2a"
+                        android:textSize="@dimen/button_text_size_card_product"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
+</layout>

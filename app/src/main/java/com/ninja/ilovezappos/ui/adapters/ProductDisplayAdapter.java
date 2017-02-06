@@ -1,6 +1,9 @@
 package com.ninja.ilovezappos.ui.adapters;
 
 import android.content.Context;
+import android.databinding.BindingAdapter;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ninja.data.entities.Result;
+import com.ninja.ilovezappos.BR;
 import com.ninja.ilovezappos.R;
+import com.ninja.ilovezappos.utils.ProductCardClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,10 +28,13 @@ public class ProductDisplayAdapter extends RecyclerView.Adapter<ProductDisplayAd
 
     ArrayList<Result> mProducts;
     Context mContext;
+    ProductCardClickListener mProductClickListener;
 
-    public ProductDisplayAdapter(Context context, ArrayList<Result> products) {
+    public ProductDisplayAdapter(Context context, ArrayList<Result> products,
+                                 ProductCardClickListener productCardClickListener) {
         mContext = context;
         mProducts = products;
+        mProductClickListener = productCardClickListener;
     }
 
     public void addProducts(ArrayList<Result> moreProducts) {
@@ -41,38 +47,17 @@ public class ProductDisplayAdapter extends RecyclerView.Adapter<ProductDisplayAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.card_product, parent, false);
-        return new ViewHolder(view);
+        ViewDataBinding viewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.card_product
+                , parent, false);
+        return new ViewHolder(viewDataBinding);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Result product = mProducts.get(position);
-        holder.mProductName.setText(product.getProductName());
-        holder.mBrandName.setText(product.getBrandName());
-        holder.mPrice.setText(product.getPrice());
-        holder.mOriginalPrice.setText(product.getOriginalPrice());
-        holder.mDiscount.setText(product.getPercentOff());
-        Picasso.with(mContext).load(product.getThumbnailImageUrl()).fit().placeholder(R.mipmap.no_search)
-                .into(holder.mProductImage);
-        holder.mShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "share being clicked on " + position, Toast.LENGTH_LONG).show();
-            }
-        });
-        holder.mInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "info being clicked on " + position, Toast.LENGTH_LONG).show();
-            }
-        });
-        holder.mAddToCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "add being clicked on " + position, Toast.LENGTH_LONG).show();
-            }
-        });
+        ViewDataBinding viewDataBinding = holder.getDataBinding();
+        viewDataBinding.setVariable(BR.result, product);
+        setClickListeners(holder, product);
     }
 
     @Override
@@ -82,24 +67,48 @@ public class ProductDisplayAdapter extends RecyclerView.Adapter<ProductDisplayAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mProductName, mBrandName, mOriginalPrice, mPrice, mDiscount;
-        ImageView mProductImage;
+        private ViewDataBinding mBinding;
         ImageButton mShare;
-        Button mAddToCard, mInfo;
+        Button mInfo, mAddToCart;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
+        public ViewHolder(ViewDataBinding viewDataBinding) {
+            super(viewDataBinding.getRoot());
+            mBinding = viewDataBinding;
 
-            mProductName = (TextView) itemView.findViewById(R.id.textview_prodname_productcard);
-            mBrandName = (TextView) itemView.findViewById(R.id.textview_manname_productcard);
-            mPrice = (TextView) itemView.findViewById(R.id.textview_prodprice_productcard);
-            mOriginalPrice = (TextView) itemView.findViewById(R.id.textview_discountprice_productcard);
-            mDiscount = (TextView) itemView.findViewById(R.id.textView_discount_productcard);
-            mProductImage = (ImageView) itemView.findViewById(R.id.imgview_product_productcard);
-            mShare = (ImageButton) itemView.findViewById(R.id.button_share_product_card);
-            mInfo = (Button) itemView.findViewById(R.id.button_info_product_card);
-            mAddToCard = (Button) itemView.findViewById(R.id.button_add_product_card);
-
+            mShare = (ImageButton) viewDataBinding.getRoot().findViewById(R.id.button_share_product_card);
+            mInfo = (Button) viewDataBinding.getRoot().findViewById(R.id.button_info_product_card);
+            mAddToCart = (Button) viewDataBinding.getRoot().findViewById(R.id.button_add_product_card);
         }
+
+        public ViewDataBinding getDataBinding() {
+            return mBinding;
+        }
+    }
+
+    private void setClickListeners(ViewHolder holder, final Result result) {
+        holder.mShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mProductClickListener.shareProduct(result.getProductId());
+            }
+        });
+        holder.mInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mProductClickListener.getInfoAboutProduct(result.getProductUrl());
+            }
+        });
+        holder.mAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mProductClickListener.addToCart();
+            }
+        });
+    }
+
+    @BindingAdapter("bind:imageUrl")
+    public static void loadImage(ImageView imageView, String url) {
+        Picasso.with(imageView.getContext()).load(url).fit().placeholder(R.mipmap.no_search)
+                .into(imageView);
     }
 }
