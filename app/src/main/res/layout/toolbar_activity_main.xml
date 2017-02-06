@@ -26,6 +26,7 @@
             tools:text="ILoveZappos"/>
 
         <EditText
+            android:id="@+id/edit_text_toolbar_mainactivity"
             android:layout_width="match_parent"
             android:layout_height="@dimen/edit_text_height_main_activity"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
