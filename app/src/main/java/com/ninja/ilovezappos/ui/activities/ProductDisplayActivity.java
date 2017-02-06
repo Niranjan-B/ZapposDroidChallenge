@@ -19,7 +19,8 @@ import android.widget.TextView;
 
 import com.ninja.data.entities.Result;
 import com.ninja.ilovezappos.R;
-import com.ninja.ilovezappos.Utils;
+import com.ninja.ilovezappos.utils.ProductCardClickListener;
+import com.ninja.ilovezappos.utils.Utils;
 import com.ninja.ilovezappos.mvp.presenters.ProductDisplayPresenter;
 import com.ninja.ilovezappos.mvp.views.ProductDisplayView;
 import com.ninja.ilovezappos.ui.adapters.ProductDisplayAdapter;
@@ -27,7 +28,8 @@ import com.ninja.ilovezappos.ui.adapters.ProductDisplayAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDisplayActivity extends AppCompatActivity implements ProductDisplayView {
+public class ProductDisplayActivity extends AppCompatActivity implements ProductDisplayView,
+        ProductCardClickListener {
 
     ProductDisplayPresenter mProductDisplayPresenter;
 
@@ -110,7 +112,7 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
     }
 
     private void initRecyclerView() {
-        mProductDisplayAdapter = new ProductDisplayAdapter(getContext(), new ArrayList<Result>());
+        mProductDisplayAdapter = new ProductDisplayAdapter(getContext(), new ArrayList<Result>(), this);
 
         mProductDisplayList.setHasFixedSize(true);
         mProductDisplayList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -182,5 +184,21 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         if (mProgressBar.getVisibility() == View.GONE) {
             mProgressBar.setVisibility(View.VISIBLE);
         }
+    }
+
+
+    @Override
+    public void shareProduct(String productId) {
+        Log.d("ninja", "Share clicked!!!" + productId);
+    }
+
+    @Override
+    public void getInfoAboutProduct(String productUrl) {
+        Log.d("ninja", "more info about product!!!" + productUrl);
+    }
+
+    @Override
+    public void addToCart() {
+        Log.d("ninja", "Added to cart!!!");
     }
 }
