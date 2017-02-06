@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -31,9 +32,9 @@
             android:layout_below="@id/imageview_nointernet_activity_main"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/edit_text_padding_main_activity"
+            android:background="@drawable/info_button_bg_card_product"
             android:text="@string/button_retry_activity_main"
-            android:textColor="#dfcd00"
-            android:background="@drawable/info_button_bg_card_product"/>
+            android:textColor="#dfcd00"/>
 
     </RelativeLayout>
 
@@ -62,6 +63,18 @@
             android:textColor="@color/textview_textcolor_nosearch"
             android:textSize="16sp"/>
     </RelativeLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_cart_main_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:src="@mipmap/shopping_cart"
+        app:elevation="@dimen/edit_text_padding_main_activity"
+        app:fabSize="normal"/>
 
 
 </RelativeLayout>
