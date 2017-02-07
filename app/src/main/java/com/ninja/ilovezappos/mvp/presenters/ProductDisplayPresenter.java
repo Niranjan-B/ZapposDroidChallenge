@@ -45,12 +45,20 @@ public class ProductDisplayPresenter implements Presenter {
 
     @Override
     public void onPause() {
-        mDisposable.dispose();
     }
+
+
 
     @Override
     public void attachView(View view) {
         mProductDisplayView = (ProductDisplayView) view;
+    }
+
+    @Override
+    public void detachView() {
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
     }
 
     private void fetchProducts() {

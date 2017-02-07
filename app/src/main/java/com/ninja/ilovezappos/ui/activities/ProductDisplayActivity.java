@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 import com.ninja.data.entities.Result;
 import com.ninja.ilovezappos.R;
 import com.ninja.ilovezappos.utils.ProductCardClickListener;
+import com.ninja.ilovezappos.utils.ProductDisplayActivityRetainFragment;
 import com.ninja.ilovezappos.utils.Utils;
 import com.ninja.ilovezappos.mvp.presenters.ProductDisplayPresenter;
 import com.ninja.ilovezappos.mvp.views.ProductDisplayView;
@@ -44,7 +46,11 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
     private RecyclerView mProductDisplayList;
     private ProductDisplayAdapter mProductDisplayAdapter;
     private FloatingActionButton mCartButton;
-    private static final String mShareUri = "https://ninja-scf.usc.edu/?product_id=";
+
+    private static final String SHARE_URI = "https://ninja-scf.usc.edu/?product_id=";
+    private static final String RETAIN_FRAGMENT_TAG = "retain_fragment";
+
+    private ProductDisplayActivityRetainFragment mRetainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,7 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         mCartButton = (FloatingActionButton) findViewById(R.id.fab_cart_main_activity);
 
         initUi();
+        initRetainFragment();
         initPresenter();
         initSearchBar();
     }
@@ -87,9 +94,28 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         mToolbarTitle.setText(getResources().getString(R.string.app_name));
     }
 
+    private void initRetainFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        mRetainFragment = (ProductDisplayActivityRetainFragment) fragmentManager.findFragmentByTag(RETAIN_FRAGMENT_TAG);
+        if (mRetainFragment == null) {
+            mRetainFragment = new ProductDisplayActivityRetainFragment();
+            fragmentManager.beginTransaction().add(mRetainFragment, RETAIN_FRAGMENT_TAG).commit();
+        }
+    }
+
     private void initPresenter() {
-        mProductDisplayPresenter = new ProductDisplayPresenter();
+        mProductDisplayPresenter = mRetainFragment.getProductDisplayActivityPresenter();
+        mRetainFragment.retainPresenter(null);
+        if (mProductDisplayPresenter == null) {
+            mProductDisplayPresenter = new ProductDisplayPresenter();
+        }
         mProductDisplayPresenter.attachView(this);
+
+        // checking if the search term is not null
+        if (mRetainFragment.getSearchTerm() != null) {
+            fetchSearchedProduct(mRetainFragment.getSearchTerm());
+        }
     }
 
     private void initSearchBar() {
@@ -100,16 +126,10 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
                     if (!mSearchBar.getText().toString().isEmpty()) {
                         // hiding keyboard after the text is entered
                         Utils.hideKeyBoard(ProductDisplayActivity.this);
-                        mProductDisplayPresenter.setSearchParam(mSearchBar.getText().toString());
-                        // checking for network connectivity
-                        if (Utils.isNetworkAvailable(ProductDisplayActivity.this)) {
-                            // calling onCreate method of presenter which creates the network connection
-                            mProductDisplayPresenter.onCreate();
-                        } else {
-                            // showing internet connection failure screen
-                            // presenter should call this
-                            mProductDisplayPresenter.displayNoInternetScreen();
-                        }
+
+                        // making network request to fetch all products
+                        fetchSearchedProduct(mSearchBar.getText().toString());
+
                     } else {
                         // displaying empty search screen
                         mProductDisplayPresenter.displayEmptySearchToast();
@@ -119,6 +139,23 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
                 return false;
             }
         });
+    }
+
+    private void fetchSearchedProduct(String term) {
+
+        // caching the search term
+        mRetainFragment.retainSearchTerm(term);
+        mProductDisplayPresenter.setSearchParam(term);
+
+        // checking for network connectivity
+        if (Utils.isNetworkAvailable(ProductDisplayActivity.this)) {
+            // calling onCreate method of presenter which creates the network connection
+            mProductDisplayPresenter.onCreate();
+        } else {
+            // showing internet connection failure screen
+            // presenter should call this
+            mProductDisplayPresenter.displayNoInternetScreen();
+        }
     }
 
     private void initUi() {
@@ -211,10 +248,9 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
 
     @Override
     public void shareProduct(String productId) {
-        //Log.d("ninja", "Share clicked!!!" + productId);
         ShareCompat.IntentBuilder
                 .from(this)
-                .setText(mShareUri + productId)
+                .setText(SHARE_URI + productId)
                 .setType("text/plain")
                 .setChooserTitle("Share Via")
                 .startChooser();
@@ -230,5 +266,15 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
     @Override
     public void addToCart() {
         Log.d("ninja", "Added to cart!!!");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!isFinishing()) {
+            mRetainFragment.retainPresenter(mProductDisplayPresenter);
+        }
+        mProductDisplayPresenter.detachView();
+        mProductDisplayPresenter = null;
     }
 }
