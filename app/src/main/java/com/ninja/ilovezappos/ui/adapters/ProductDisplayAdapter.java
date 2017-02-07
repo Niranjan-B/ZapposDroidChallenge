@@ -41,7 +41,7 @@ public class ProductDisplayAdapter extends RecyclerView.Adapter<ProductDisplayAd
         if (!mProducts.isEmpty()) {
             mProducts.clear();
         }
-        mProducts.addAll(moreProducts);
+        mProducts.add(moreProducts.get(0));
         notifyDataSetChanged();
     }
 
