@@ -1,6 +1,10 @@
 package com.ninja.ilovezappos.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -39,6 +43,8 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
     private ProgressBar mProgressBar;
     private RecyclerView mProductDisplayList;
     private ProductDisplayAdapter mProductDisplayAdapter;
+    private FloatingActionButton mCartButton;
+    private static final String mShareUri = "https://ninja-scf.usc.edu/?product_id=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +57,26 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         mRetryButton = (Button) findViewById(R.id.button_retry_main_activity);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar_main_activity);
         mProductDisplayList = (RecyclerView) findViewById(R.id.recyclerview_products_main_activity);
+        mCartButton = (FloatingActionButton) findViewById(R.id.fab_cart_main_activity);
 
         initUi();
         initPresenter();
         initSearchBar();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Uri data = this.getIntent().getData();
+
+        if (data != null && data.isHierarchical() && getContext() != null) {
+            if (data.getQueryParameter("product_id") != null) {
+                // launch the activity with the product
+                mProductDisplayPresenter.setSearchParam(data.getQueryParameter("product_id"));
+                mProductDisplayPresenter.onCreate();
+            }
+        }
     }
 
     private void initToolbar() {
@@ -189,12 +211,20 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
 
     @Override
     public void shareProduct(String productId) {
-        Log.d("ninja", "Share clicked!!!" + productId);
+        //Log.d("ninja", "Share clicked!!!" + productId);
+        ShareCompat.IntentBuilder
+                .from(this)
+                .setText(mShareUri + productId)
+                .setType("text/plain")
+                .setChooserTitle("Share Via")
+                .startChooser();
     }
 
     @Override
     public void getInfoAboutProduct(String productUrl) {
-        Log.d("ninja", "more info about product!!!" + productUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(productUrl));
+        startActivity(intent);
     }
 
     @Override
