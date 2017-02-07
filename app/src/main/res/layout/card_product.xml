@@ -6,9 +6,12 @@
     <data>
 
         <import type="com.ninja.data.entities.Result"/>
+
         <import type="android.view.View"/>
 
-        <variable name="result" type="Result"/>
+        <variable
+            name="result"
+            type="Result"/>
 
     </data>
 
@@ -102,12 +105,12 @@
                     android:layout_alignBottom="@+id/textview_leftpar_productcard"
                     android:layout_toEndOf="@+id/textview_leftpar_productcard"
                     android:layout_toRightOf="@+id/textview_leftpar_productcard"
+                    android:background="@drawable/strike_through"
                     android:ellipsize="end"
                     android:maxLength="10"
                     android:text="@{result.originalPrice}"
                     android:visibility='@{result.percentOff.equals("0%") ? View.GONE : View.VISIBLE}'
-                    tools:text="$1000"
-                    android:background="@drawable/strike_through"/>
+                    tools:text="$1000"/>
 
                 <TextView
                     android:id="@+id/textview_rightpar_productcard"
@@ -179,7 +182,7 @@
                         android:src="@drawable/ic_share_black_24dp"
                         android:textColor="#63a0ef"/>
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/button_info_product_card"
                         android:layout_width="@dimen/button_width_card_product"
                         android:layout_height="@dimen/button_height_card_product"
@@ -187,7 +190,7 @@
                         android:layout_marginRight="@dimen/edit_text_padding_main_activity"
                         android:layout_weight="1"
                         android:background="@drawable/info_button_bg_card_product"
-                        android:text="\?"
+                        android:src="@drawable/information_outline"
                         android:textColor="#dfcd00"
                         android:textSize="@dimen/button_text_size_card_product"/>
 
