@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -15,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,6 +53,8 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
     private static final String SHARE_URI = "https://ninja-scf.usc.edu/?product_id=";
     private static final String RETAIN_FRAGMENT_TAG = "retain_fragment";
 
+    private Animation mProductAddedToCart;
+
     private ProductDisplayActivityRetainFragment mRetainFragment;
 
     @Override
@@ -64,6 +69,8 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar_main_activity);
         mProductDisplayList = (RecyclerView) findViewById(R.id.recyclerview_products_main_activity);
         mCartButton = (FloatingActionButton) findViewById(R.id.fab_cart_main_activity);
+
+        mProductAddedToCart = AnimationUtils.loadAnimation(this, R.anim.fab_scale_in);
 
         initUi();
         initRetainFragment();
@@ -265,7 +272,28 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
 
     @Override
     public void addToCart() {
-        Log.d("ninja", "Added to cart!!!");
+        // setting empty cart drawable to simulate a new product being added each time the add button is clicked
+        mCartButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.shopping_cart));
+        mCartButton.startAnimation(mProductAddedToCart);
+
+        mProductAddedToCart.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mCartButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.shopping_cart_loaded));
+                Animation fabScaleOut = AnimationUtils.loadAnimation(getContext(), R.anim.fab_scale_out);
+                mCartButton.startAnimation(fabScaleOut);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
     }
 
     @Override
