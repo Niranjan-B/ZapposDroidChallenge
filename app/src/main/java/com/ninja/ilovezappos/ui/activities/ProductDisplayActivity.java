@@ -1,6 +1,12 @@
 package com.ninja.ilovezappos.ui.activities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.ShareCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,6 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +28,7 @@ import android.widget.TextView;
 import com.ninja.data.entities.Result;
 import com.ninja.ilovezappos.R;
 import com.ninja.ilovezappos.utils.ProductCardClickListener;
+import com.ninja.ilovezappos.utils.ProductDisplayActivityRetainFragment;
 import com.ninja.ilovezappos.utils.Utils;
 import com.ninja.ilovezappos.mvp.presenters.ProductDisplayPresenter;
 import com.ninja.ilovezappos.mvp.views.ProductDisplayView;
@@ -39,6 +48,14 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
     private ProgressBar mProgressBar;
     private RecyclerView mProductDisplayList;
     private ProductDisplayAdapter mProductDisplayAdapter;
+    private FloatingActionButton mCartButton;
+
+    private static final String SHARE_URI = "https://ninja-scf.usc.edu/?product_id=";
+    private static final String RETAIN_FRAGMENT_TAG = "retain_fragment";
+
+    private Animation mProductAddedToCart;
+
+    private ProductDisplayActivityRetainFragment mRetainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +68,29 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         mRetryButton = (Button) findViewById(R.id.button_retry_main_activity);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar_main_activity);
         mProductDisplayList = (RecyclerView) findViewById(R.id.recyclerview_products_main_activity);
+        mCartButton = (FloatingActionButton) findViewById(R.id.fab_cart_main_activity);
+
+        mProductAddedToCart = AnimationUtils.loadAnimation(this, R.anim.fab_scale_in);
 
         initUi();
+        initRetainFragment();
         initPresenter();
         initSearchBar();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Uri data = this.getIntent().getData();
+
+        if (data != null && data.isHierarchical() && getContext() != null) {
+            if (data.getQueryParameter("product_id") != null) {
+                // launch the activity with the product
+                mProductDisplayPresenter.setSearchParam(data.getQueryParameter("product_id"));
+                mProductDisplayPresenter.onCreate();
+            }
+        }
     }
 
     private void initToolbar() {
@@ -65,9 +101,28 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
         mToolbarTitle.setText(getResources().getString(R.string.app_name));
     }
 
+    private void initRetainFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        mRetainFragment = (ProductDisplayActivityRetainFragment) fragmentManager.findFragmentByTag(RETAIN_FRAGMENT_TAG);
+        if (mRetainFragment == null) {
+            mRetainFragment = new ProductDisplayActivityRetainFragment();
+            fragmentManager.beginTransaction().add(mRetainFragment, RETAIN_FRAGMENT_TAG).commit();
+        }
+    }
+
     private void initPresenter() {
-        mProductDisplayPresenter = new ProductDisplayPresenter();
+        mProductDisplayPresenter = mRetainFragment.getProductDisplayActivityPresenter();
+        mRetainFragment.retainPresenter(null);
+        if (mProductDisplayPresenter == null) {
+            mProductDisplayPresenter = new ProductDisplayPresenter();
+        }
         mProductDisplayPresenter.attachView(this);
+
+        // checking if the search term is not null
+        if (mRetainFragment.getSearchTerm() != null) {
+            fetchSearchedProduct(mRetainFragment.getSearchTerm());
+        }
     }
 
     private void initSearchBar() {
@@ -78,16 +133,10 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
                     if (!mSearchBar.getText().toString().isEmpty()) {
                         // hiding keyboard after the text is entered
                         Utils.hideKeyBoard(ProductDisplayActivity.this);
-                        mProductDisplayPresenter.setSearchParam(mSearchBar.getText().toString());
-                        // checking for network connectivity
-                        if (Utils.isNetworkAvailable(ProductDisplayActivity.this)) {
-                            // calling onCreate method of presenter which creates the network connection
-                            mProductDisplayPresenter.onCreate();
-                        } else {
-                            // showing internet connection failure screen
-                            // presenter should call this
-                            mProductDisplayPresenter.displayNoInternetScreen();
-                        }
+
+                        // making network request to fetch all products
+                        fetchSearchedProduct(mSearchBar.getText().toString());
+
                     } else {
                         // displaying empty search screen
                         mProductDisplayPresenter.displayEmptySearchToast();
@@ -97,6 +146,23 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
                 return false;
             }
         });
+    }
+
+    private void fetchSearchedProduct(String term) {
+
+        // caching the search term
+        mRetainFragment.retainSearchTerm(term);
+        mProductDisplayPresenter.setSearchParam(term);
+
+        // checking for network connectivity
+        if (Utils.isNetworkAvailable(ProductDisplayActivity.this)) {
+            // calling onCreate method of presenter which creates the network connection
+            mProductDisplayPresenter.onCreate();
+        } else {
+            // showing internet connection failure screen
+            // presenter should call this
+            mProductDisplayPresenter.displayNoInternetScreen();
+        }
     }
 
     private void initUi() {
@@ -189,16 +255,54 @@ public class ProductDisplayActivity extends AppCompatActivity implements Product
 
     @Override
     public void shareProduct(String productId) {
-        Log.d("ninja", "Share clicked!!!" + productId);
+        ShareCompat.IntentBuilder
+                .from(this)
+                .setText(SHARE_URI + productId)
+                .setType("text/plain")
+                .setChooserTitle("Share Via")
+                .startChooser();
     }
 
     @Override
     public void getInfoAboutProduct(String productUrl) {
-        Log.d("ninja", "more info about product!!!" + productUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(productUrl));
+        startActivity(intent);
     }
 
     @Override
     public void addToCart() {
-        Log.d("ninja", "Added to cart!!!");
+        // setting empty cart drawable to simulate a new product being added each time the add button is clicked
+        mCartButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.shopping_cart));
+        mCartButton.startAnimation(mProductAddedToCart);
+
+        mProductAddedToCart.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                mCartButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.mipmap.shopping_cart_loaded));
+                Animation fabScaleOut = AnimationUtils.loadAnimation(getContext(), R.anim.fab_scale_out);
+                mCartButton.startAnimation(fabScaleOut);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (!isFinishing()) {
+            mRetainFragment.retainPresenter(mProductDisplayPresenter);
+        }
+        mProductDisplayPresenter.detachView();
+        mProductDisplayPresenter = null;
     }
 }

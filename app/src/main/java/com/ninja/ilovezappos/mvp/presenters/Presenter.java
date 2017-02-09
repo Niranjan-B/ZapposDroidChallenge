@@ -12,4 +12,5 @@ public interface Presenter {
     void onCreate();
     void onPause();
     void attachView(View view);
+    void detachView();
 }

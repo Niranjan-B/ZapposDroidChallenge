@@ -41,7 +41,7 @@ public class ProductDisplayAdapter extends RecyclerView.Adapter<ProductDisplayAd
         if (!mProducts.isEmpty()) {
             mProducts.clear();
         }
-        mProducts.addAll(moreProducts);
+        mProducts.add(moreProducts.get(0));
         notifyDataSetChanged();
     }
 
@@ -68,15 +68,15 @@ public class ProductDisplayAdapter extends RecyclerView.Adapter<ProductDisplayAd
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private ViewDataBinding mBinding;
-        ImageButton mShare;
-        Button mInfo, mAddToCart;
+        ImageButton mShare, mInfo;
+        Button mAddToCart;
 
         public ViewHolder(ViewDataBinding viewDataBinding) {
             super(viewDataBinding.getRoot());
             mBinding = viewDataBinding;
 
             mShare = (ImageButton) viewDataBinding.getRoot().findViewById(R.id.button_share_product_card);
-            mInfo = (Button) viewDataBinding.getRoot().findViewById(R.id.button_info_product_card);
+            mInfo = (ImageButton) viewDataBinding.getRoot().findViewById(R.id.button_info_product_card);
             mAddToCart = (Button) viewDataBinding.getRoot().findViewById(R.id.button_add_product_card);
         }
 

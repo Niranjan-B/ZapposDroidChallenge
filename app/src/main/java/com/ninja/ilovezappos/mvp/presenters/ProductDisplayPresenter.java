@@ -45,15 +45,25 @@ public class ProductDisplayPresenter implements Presenter {
 
     @Override
     public void onPause() {
-        mDisposable.dispose();
     }
+
+
 
     @Override
     public void attachView(View view) {
         mProductDisplayView = (ProductDisplayView) view;
     }
 
+    @Override
+    public void detachView() {
+        if (mDisposable != null && !mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
+    }
+
     private void fetchProducts() {
+        mProductDisplayView.showProgress();
+
         mGetProductsUseCase.execute().subscribe(new Observer<Product>() {
             @Override
             public void onSubscribe(Disposable d) {
@@ -72,7 +82,6 @@ public class ProductDisplayPresenter implements Presenter {
                     mProductDisplayView.showEmptySearchToast("Please refine your search");
                 } else {
                     // if the results are got successfully, pass them on the activity to display and hide state change views
-                    mProductDisplayView.showProgress();
                     hideStateChangeViews();
                     mProductDisplayView.displayProductView();
                     mProductDisplayView.showSearchResults(value.getResults());
